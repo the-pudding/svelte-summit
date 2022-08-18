@@ -1,8 +1,11 @@
 <script>
 	import Scrolly from "$components/helpers/Scrolly.svelte";
 	import Bar from "$components/Bar.svelte";
+	import Line from "$components/Line.svelte";
+	import raw from "$data/data.csv";
 	import barUnsorted from "$data/bar_unsorted.csv";
 	import barSorted from "$data/bar_sorted.csv";
+	import _ from "lodash";
 
 	let scrollValue;
 
@@ -20,45 +23,34 @@
 	let middleLine;
 	let colorByMajority;
 
-	$: scrollValue, update();
-	// TODO: refactor into reactive variables?
-	const update = () => {
-		if (scrollValue === 0) {
-			barData = barUnsorted.map((d) => ({
-				...d,
-				female_year_2022: +d.female_year_2022
-			}));
-			middleLine = false;
-			colorByMajority = false;
-		} else if (scrollValue === 1) {
-			barData = barUnsorted.map((d) => ({
-				...d,
-				female_year_2022: +d.female_year_2022
-			}));
-			middleLine = true;
-			colorByMajority = false;
-		} else if (scrollValue === 2) {
-			barData = barSorted.map((d) => ({
-				...d,
-				female_year_2022: +d.female_year_2022
-			}));
-			middleLine = true;
-			colorByMajority = false;
-		} else if (scrollValue === 3) {
-			barData = barSorted.map((d) => ({
-				...d,
-				female_year_2022: +d.female_year_2022
-			}));
-			middleLine = true;
-			colorByMajority = true;
-		}
-	};
+	// TODO: use data.csv for everything
+	// TODO: don't do genre
+	const nums = raw.map((d) => _.mapValues(d, (v) => +v));
+	console.log({ nums });
+
+	$: showBar = scrollValue && scrollValue < 4;
+	$: showLine = scrollValue >= 4;
+	$: barData =
+		scrollValue < 2 || scrollValue === undefined
+			? barUnsorted.map((d) => ({
+					...d,
+					female_year_2022: +d.female_year_2022
+			  }))
+			: barSorted.map((d) => ({
+					...d,
+					female_year_2022: +d.female_year_2022,
+					female_listeners_2020: +d.female_listeners_2020
+			  }));
+	$: middleLine = scrollValue >= 1;
+	$: colorByMajority = scrollValue >= 3;
 </script>
 
 <section id="scrolly">
 	<div class="sticky">
-		{#if barData}
+		{#if showBar}
 			<Bar data={barData} {middleLine} {colorByMajority} />
+		{:else if showLine}
+			<Line />
 		{/if}
 	</div>
 
@@ -74,6 +66,9 @@
 
 <style>
 	.sticky {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		position: sticky;
 		top: 4em;
 		z-index: -1000;

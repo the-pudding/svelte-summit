@@ -5,6 +5,7 @@
 	export let middleLine;
 	export let colorByMajority;
 
+	const width = 800;
 	const height = 600;
 	const barWidth = 25;
 	const numTicks = 7;
@@ -26,7 +27,7 @@
 	// TODO: i think i'm doing the coloring wrong
 </script>
 
-<figure style:height={`${height}px`}>
+<figure style:width={`${width}px`} style:height={`${height}px`}>
 	<!-- axis -->
 	<div class="axis">
 		{#each range(numTicks) as tick}
@@ -39,7 +40,7 @@
 	{#each data as bar}
 		{@const height = `${heightScale(bar.female_year_2022)}px`}
 		{@const width = `${barWidth}px`}
-		{@const majorityFemale = bar.female_year_2022 >= 0.5}
+		{@const majorityFemale = bar.female_listeners_2020 >= 0.5}
 		{@const background =
 			colorByMajority && majorityFemale ? colors[1] : colors[0]}
 		<div class="bar-group">
@@ -77,7 +78,6 @@
 		font-family: var(--mono);
 		color: var(--color-gray-500);
 		position: relative;
-		width: 80%;
 	}
 	.bar-group {
 		display: flex;
