@@ -75,6 +75,14 @@
 	});
 </script>
 
-<div bind:this={container}>
+<div bind:this={container} class="container">
 	<slot />
 </div>
+
+<style>
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+	}
+</style>
