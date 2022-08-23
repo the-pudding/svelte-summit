@@ -2,9 +2,9 @@
 	import Scrolly from "$components/helpers/Scrolly.svelte";
 	import Bar from "$components/Bar.svelte";
 	import Line from "$components/Line.svelte";
+	import Toggle from "$components/helpers/Toggle.svelte";
 	import raw from "$data/data.csv";
-	import barUnsorted from "$data/bar_unsorted.csv";
-	import barSorted from "$data/bar_sorted.csv";
+	import { animation } from "$stores/misc.js";
 	import _ from "lodash";
 
 	let scrollValue;
@@ -23,34 +23,45 @@
 	let middleLine;
 	let colorByMajority;
 
-	// TODO: use data.csv for everything
-	// TODO: don't do genre
-	const nums = raw.map((d) => _.mapValues(d, (v) => +v));
-	console.log({ nums });
+	const data = raw.map((d) =>
+		_.mapValues(d, (value, key) => {
+			if (key !== "genre") return +value;
+			return value;
+		})
+	);
 
-	$: showBar = scrollValue && scrollValue < 4;
+	const prepLine = (genre) => {
+		const row = data.filter((d) => d.genre === genre)[0];
+		const years = [2018, 2020, 2022];
+
+		let prefix;
+		if (scrollValue === 6) prefix = `shareskew`;
+		else prefix = `female_year`;
+
+		return years.map((year) => ({ year, value: row[`${prefix}_${year}`] }));
+	};
+
+	$: showBar = scrollValue < 4 || scrollValue === undefined;
 	$: showLine = scrollValue >= 4;
 	$: barData =
 		scrollValue < 2 || scrollValue === undefined
-			? barUnsorted.map((d) => ({
-					...d,
-					female_year_2022: +d.female_year_2022
-			  }))
-			: barSorted.map((d) => ({
-					...d,
-					female_year_2022: +d.female_year_2022,
-					female_listeners_2020: +d.female_listeners_2020
-			  }));
+			? data
+			: _.orderBy(data, (d) => d.female_year_2022);
 	$: middleLine = scrollValue >= 1;
 	$: colorByMajority = scrollValue >= 3;
+	$: lineData = scrollValue === 4 ? prepLine("pop") : prepLine("k-pop");
 </script>
+
+<div class="toggle">
+	<Toggle label="animation" style="inner" bind:value={$animation} />
+</div>
 
 <section id="scrolly">
 	<div class="sticky">
 		{#if showBar}
 			<Bar data={barData} {middleLine} {colorByMajority} />
 		{:else if showLine}
-			<Line />
+			<Line data={lineData} />
 		{/if}
 	</div>
 
@@ -61,10 +72,18 @@
 				<p>{text}</p>
 			</div>
 		{/each}
+
+		<div class="spacer" />
 	</Scrolly>
 </section>
 
 <style>
+	.toggle {
+		position: fixed;
+		top: 0;
+		right: 0;
+	}
+
 	.sticky {
 		display: flex;
 		flex-direction: column;
@@ -75,7 +94,7 @@
 	}
 
 	.step {
-		margin-top: 100vh;
+		margin-top: 90vh;
 		width: 500px;
 		background: var(--color-gray-100);
 		text-align: center;
@@ -83,5 +102,9 @@
 
 	.step p {
 		padding: 1rem;
+	}
+
+	.spacer {
+		height: 85vh;
 	}
 </style>

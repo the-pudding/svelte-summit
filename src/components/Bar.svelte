@@ -1,5 +1,8 @@
 <script>
 	import { scaleLinear, range, max } from "d3";
+	import { animation } from "$stores/misc.js";
+	import { fade } from "svelte/transition";
+	import { flip } from "svelte/animate";
 
 	export let data;
 	export let middleLine;
@@ -13,18 +16,7 @@
 
 	$: maxY = max(data.map((d) => d.female_year_2022));
 	$: heightScale = scaleLinear().domain([0, maxY]).range([0, height]);
-
-	// 1) fade in line
-	// import { fade } from "svelte/transition";
-	// add transition:fade to .line-group
-
-	// 2) animate sort
-	// import { flip } from "svelte/animate";
-	// add animate:flip to .bar-group
-	// add (bar.genre) as a key in the {#each data as bar} loop
-
-	// 3) color tween
-	// TODO: i think i'm doing the coloring wrong
+	$: t = { duration: $animation === "on" ? 1000 : 0 };
 </script>
 
 <figure style:width={`${width}px`} style:height={`${height}px`}>
@@ -37,13 +29,13 @@
 	</div>
 
 	<!-- bars -->
-	{#each data as bar}
+	{#each data as bar (bar.genre)}
 		{@const height = `${heightScale(bar.female_year_2022)}px`}
 		{@const width = `${barWidth}px`}
 		{@const majorityFemale = bar.female_listeners_2020 >= 0.5}
 		{@const background =
 			colorByMajority && majorityFemale ? colors[1] : colors[0]}
-		<div class="bar-group">
+		<div class="bar-group" animate:flip={t}>
 			<div class="bar" style:height style:width style:background />
 			<div class="label">{bar.genre}</div>
 		</div>
@@ -51,7 +43,7 @@
 
 	<!-- middle line -->
 	{#if middleLine}
-		<div class="line-group" style:bottom={`${heightScale(0.5)}px`}>
+		<div class="line-group" style:bottom={`${heightScale(0.5)}px`} in:fade={t}>
 			<div class="line" />
 			<div class="line-label">
 				majority streams by female or mixed-gender artists
