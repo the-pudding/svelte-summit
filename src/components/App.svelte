@@ -1,7 +1,7 @@
 <script>
 	import Scrolly from "$components/helpers/Scrolly.svelte";
-	import Bar from "$components/Bar.svelte";
-	import Line from "$components/Line.svelte";
+	import BarChart from "$components/BarChart.svelte";
+	import LineChart from "$components/LineChart.svelte";
 	import Toggle from "$components/helpers/Toggle.svelte";
 	import raw from "$data/data.csv";
 	import { animation } from "$stores/misc.js";
@@ -59,9 +59,9 @@
 <section id="scrolly">
 	<div class="sticky">
 		{#if showBar}
-			<Bar data={barData} {middleLine} {colorByMajority} />
+			<BarChart data={barData} {middleLine} {colorByMajority} />
 		{:else if showLine}
-			<Line data={lineData} />
+			<LineChart data={lineData} />
 		{/if}
 	</div>
 
