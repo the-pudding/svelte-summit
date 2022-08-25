@@ -4,7 +4,7 @@
 	import Line from "$components/charts/Line.svelte";
 	import AxisX from "$components/charts/AxisX.svg.svelte";
 	import AxisY from "$components/charts/AxisY.svg.svelte";
-	import { extent, max } from "d3";
+	import { max } from "d3";
 	import { tweened } from "svelte/motion";
 	import { animation } from "$stores/misc.js";
 
