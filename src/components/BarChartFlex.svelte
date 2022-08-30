@@ -10,29 +10,12 @@
 	export let middleLine;
 	export let colorByMajority;
 
-	const randomColor = () => {
-		var o = Math.round,
-			r = Math.random,
-			s = 255;
-		return (
-			"rgba(" +
-			o(r() * s) +
-			"," +
-			o(r() * s) +
-			"," +
-			o(r() * s) +
-			"," +
-			r().toFixed(1) +
-			")"
-		);
-	};
-
 	const width = 800;
 	const height = 600;
 	const barWidth = 25;
 	const numTicks = 7;
-	const color = "rgb(89, 149, 227)";
-	const highlightColor = "rgb(230, 69, 101)";
+	const color = "rgb(247, 141, 42)";
+	const highlightColor = "rgb(219, 211, 189)";
 	const colorTween = tweened(color, {
 		interpolate: interpolateLab,
 		duration: 800
