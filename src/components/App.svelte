@@ -1,6 +1,7 @@
 <script>
 	import Scrolly from "$components/helpers/Scrolly.svelte";
 	import BarChart from "$components/BarChart.svelte";
+	import Table from "$components/Table.svelte";
 	import LineChart from "$components/LineChart.svelte";
 	import Toggle from "$components/helpers/Toggle.svelte";
 	import { animation } from "$stores/misc.js";
@@ -54,7 +55,7 @@
 		{#if showBar}
 			<BarChart data={barData} {middleLine} />
 		{:else if showTable}
-			<p>table</p>
+			<Table />
 		{:else if showLine}
 			<LineChart data={lineData} domain={$lineDomain} />
 		{/if}

@@ -28,7 +28,7 @@
 		<Svg>
 			<AxisX ticks={2} formatTick={(d) => timeFormatter(d)} />
 			<AxisY ticks={4} />
-			<Line stroke="pink" />
+			<Line stroke="orange" />
 		</Svg>
 	</LayerCake>
 </div>

@@ -3,6 +3,7 @@
 	import { animation } from "$stores/misc.js";
 	import _ from "lodash";
 	import { fade } from "svelte/transition";
+	import { onDestroy } from "svelte";
 
 	export let data;
 	export let middleLine;
@@ -22,7 +23,6 @@
 		.domain(data.map(yAccessor))
 		.range([margin.top, height - margin.bottom])
 		.paddingInner(0.03);
-
 	$: t = { duration: $animation === "on" ? 1000 : 0 };
 </script>
 
@@ -47,7 +47,7 @@
 		</g>
 
 		{#if middleLine}
-			<g transform={`translate(${xScale(0.5)}, 0)`} transition:fade={t}>
+			<g transform={`translate(${xScale(0.5)}, 0)`} transition:fade|local={t}>
 				<line x1={0} y1={25} x2={0} y2={height - margin.bottom} />
 				<text x={0} y={15} class="line-anno"
 					>majority streams by female or mixed-gender artists</text
@@ -59,7 +59,7 @@
 
 <style>
 	rect {
-		fill: rgb(247, 141, 42);
+		fill: orange;
 	}
 	.animated {
 		transition: all 1500ms;
