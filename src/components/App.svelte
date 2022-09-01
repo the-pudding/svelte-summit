@@ -7,7 +7,7 @@
 	import { animation } from "$stores/misc.js";
 	import { extent } from "d3";
 	import { tweened } from "svelte/motion";
-	import { getBarData, getLineData } from "$utils/prepData.js";
+	import { getBarData, getTableData, getLineData } from "$utils/prepData.js";
 
 	let scrollValue;
 
@@ -30,6 +30,7 @@
 	$: showTable = scrollValue >= 3 && scrollValue < 5;
 	$: showLine = scrollValue >= 5;
 	$: barData = getBarData(scrollValue);
+	$: tableData = getTableData(scrollValue);
 	$: middleLine = scrollValue >= 1;
 	$: if ($lineDomain) updateDomain(scrollValue);
 
@@ -55,7 +56,7 @@
 		{#if showBar}
 			<BarChart data={barData} {middleLine} />
 		{:else if showTable}
-			<Table />
+			<Table data={tableData} {scrollValue} />
 		{:else if showLine}
 			<LineChart data={lineData} domain={$lineDomain} />
 		{/if}
@@ -91,7 +92,7 @@
 
 	.step {
 		margin-top: 90vh;
-		margin-right: 1em;
+		margin-left: 1em;
 		width: 500px;
 		background: var(--color-gray-100);
 		text-align: center;

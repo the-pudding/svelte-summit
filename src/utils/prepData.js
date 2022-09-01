@@ -15,6 +15,14 @@ export const getBarData = (scrollValue) => {
 	else return _.orderBy(data, (d) => d.female_year_2022).map(filterKeys);
 };
 
+export const getTableData = (scrollValue) => {
+	const needed = ["genre", "female_year_2022", "female_listeners_2020"];
+	const filterKeys = (d) => _.pick(d, needed);
+	if (scrollValue === 3)
+		return _.orderBy(data, (d) => d.female_listeners_2020).map(filterKeys);
+	else return _.orderBy(data, (d) => d.female_year_2022).map(filterKeys);
+};
+
 export const getLineData = (genre) => {
 	const row = data.filter((d) => d.genre === genre)[0];
 
