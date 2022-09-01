@@ -6,7 +6,8 @@
 /* colors defined in variables.css */
 :root {
 	/* font */
-	--sans: "National 2 Web", -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+	--sans: "National 2 Web", -apple-system, BlinkMacSystemFont, Helvetica, Arial,
+		sans-serif;
 	--serif: "Tiempos Text Web", Iowan Old Style, Times New Roman, Times, serif;
 	--mono: Menlo, Consolas, Monaco, monospace;
 
@@ -18,7 +19,7 @@
 
 	/* presets (used in reset.css) */
 	--border-radius: 2px;
-	--font-body: var(--serif);
+	--font-body: var(--sans);
 	--font-form: var(--sans);
 	--color-bg: var(--color-white);
 	--color-fg: var(--color-gray-900);
@@ -40,7 +41,7 @@
 }
 
 /* dark theme */
-@media screen and (prefers-color-scheme:dark) {
+@media screen and (prefers-color-scheme: dark) {
 	:root {
 		--color-bg: var(--color-gray-900);
 		--color-fg: var(--color-gray-100);

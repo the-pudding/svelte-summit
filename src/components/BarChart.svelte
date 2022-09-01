@@ -5,7 +5,6 @@
 	import { tweened } from "svelte/motion";
 	import { interpolateLab } from "d3-interpolate";
 	import { fade } from "svelte/transition";
-	import { flip } from "svelte/animate";
 
 	export let data;
 	export let middleLine;
@@ -15,7 +14,7 @@
 
 	const width = 800;
 	const height = 600;
-	const margin = { left: 0, top: 0, right: 0, bottom: 20 };
+	const margin = { left: 150, top: 40, right: 100, bottom: 0 };
 	const color = "rgb(247, 141, 42)";
 	const highlightColor = "rgb(219, 211, 189)";
 	const colorTween = tweened(color, {
@@ -23,14 +22,16 @@
 		duration: 800
 	});
 
-	const xAccessor = (d) => d.genre;
-	const yAccessor = (d) => d.female_year_2022;
-	$: xScale = scaleBand()
-		.domain(data.map(xAccessor))
+	const xAccessor = (d) => d.female_year_2022;
+	const yAccessor = (d) => d.genre;
+	$: xScale = scaleLinear()
+		.domain([0, max(data, xAccessor)])
 		.range([margin.left, width - margin.right]);
-	$: yScale = scaleLinear()
-		.domain([0, max(data, yAccessor)])
-		.range([height - margin.bottom, margin.top]);
+	$: yScale = scaleBand()
+		.domain(data.map(yAccessor))
+		.range([margin.top, height - margin.bottom])
+		.paddingInner(0.03);
+
 	$: t = { duration: $animation === "on" ? 1000 : 0 };
 	$: colorByMajority, updateColor();
 
@@ -42,12 +43,12 @@
 
 <figure style:width={`${width}px`} style:height={`${height}px`}>
 	<svg {width} {height}>
-		<g transform={`translate(${margin.left}, ${margin.top})`}>
+		<g>
 			{#each sortedData as bar (bar.genre)}
-				{@const x = xScale(xAccessor(bar))}
+				{@const x = margin.left}
 				{@const y = yScale(yAccessor(bar))}
-				{@const h = yScale(0) - yScale(yAccessor(bar))}
-				{@const w = xScale.bandwidth()}
+				{@const h = yScale.bandwidth()}
+				{@const w = xScale(xAccessor(bar))}
 				{@const highlight = colorByMajority && bar.female_listeners_2020 >= 0.5}
 				{@const fill =
 					$animation === "on" && highlight
@@ -55,23 +56,22 @@
 						: $animation === "off" && highlight
 						? highlightColor
 						: color}
-				{@const label = xAccessor(bar)}
+				{@const label = yAccessor(bar)}
 				<g
 					id={_.kebabCase(bar.genre)}
 					class:animated={$animation === "on"}
 					transform={`translate(${x}, ${y})`}
-					animate:flip={t}
 				>
 					<rect height={h} width={w} {fill} />
-					<text x={0} y={h + 20}>{label}</text>
+					<text x={-10} y={h - 10} class="label">{label}</text>
 				</g>
 			{/each}
 		</g>
 
 		{#if middleLine}
-			<g transform={`translate(0, ${yScale(0.5)})`} in:fade={t}>
-				<line x1={margin.left} y1={0} x2={width - margin.right} y2={0} />
-				<text x={0} y={-10}
+			<g transform={`translate(${xScale(0.5)}, 0)`} transition:fade={t}>
+				<line x1={0} y1={25} x2={0} y2={height - margin.bottom} />
+				<text x={0} y={15} class="line-anno"
 					>majority streams by female or mixed-gender artists</text
 				>
 			</g>
@@ -80,11 +80,19 @@
 </figure>
 
 <style>
-	/* .animated {
-		transition: all 2s;
-	} */
+	.animated {
+		transition: all 1500ms;
+	}
 	line {
-		stroke: black;
+		stroke: var(--color-gray-400);
 		stroke-width: 4px;
+	}
+	.label {
+		font-size: 14px;
+		text-anchor: end;
+	}
+	.line-anno {
+		text-anchor: middle;
+		fill: var(--color-gray-800);
 	}
 </style>

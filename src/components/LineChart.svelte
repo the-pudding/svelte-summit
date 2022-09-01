@@ -4,22 +4,15 @@
 	import Line from "$components/charts/Line.svelte";
 	import AxisX from "$components/charts/AxisX.svg.svelte";
 	import AxisY from "$components/charts/AxisY.svg.svelte";
-	import { extent, max, timeFormat } from "d3";
-	import { tweened } from "svelte/motion";
-	import { animation } from "$stores/misc.js";
+	import { timeFormat } from "d3";
 
 	export let data;
 	export let domain;
 
+	$: console.log({ data });
+
 	const xKey = "date";
 	const yKey = "value";
-
-	const yDomain = tweened([0, max(data, (d) => d.value)], { duration: 1000 });
-
-	$: data, updateDomain();
-	const updateDomain = () => {
-		$yDomain = [0, max(data, (d) => d.value)];
-	};
 
 	const timeFormatter = timeFormat("%b %Y");
 </script>
@@ -30,7 +23,7 @@
 		x={xKey}
 		y={yKey}
 		xDomain={domain}
-		yDomain={$animation === "on" ? $yDomain : [0, null]}
+		yDomain={[0, null]}
 		yNice={true}
 		{data}
 	>
