@@ -14,36 +14,35 @@
 		"Here are the top 15 genres and their share of streams by women/mixed gender bands.",
 		"Genres above the line have majority of streams by women/mixed gender bands.",
 		"Let’s sort by the percentage of streams by women/mixed gender bands.",
-		"We can layer on another data point - the highlighted genres are majority <strong>listened to</strong> by women.",
-		"We also have this data over time. Here’s pop music.",
-		"And k-pop. There are now fewer women artists in k-pop by streams.",
-		"We can look at a different data point: where female listeners play female artists more than male listeners do, which is most of them"
+		"This is a table sorted by women/mixed gender performers",
+		"Now we can sort it by women/mixed gender listeners",
+		"This is k-pop recently, stationary",
+		"If we zoom out, we can see this is part of a big surge"
 	];
 
 	let barData;
 	let middleLine;
-	let colorByMajority;
 
 	const lineData = getLineData("k-pop");
-	let lineDomain = tweened(
-		lineData.slice(0, 2).map((d) => d.date),
-		{ duration: $animation ? 1000 : 0 }
-	);
-	$: scrollValue, updateDomain();
+
+	$: showBar = scrollValue < 3 || scrollValue === undefined;
+	$: showTable = scrollValue >= 3 && scrollValue < 5;
+	$: showLine = scrollValue >= 5;
+	$: barData = getBarData(scrollValue);
+	$: middleLine = scrollValue >= 1;
+	$: if ($lineDomain) updateDomain(scrollValue);
+
+	$: lineDomain = tweened([new Date("5-1-2021"), new Date("9-1-2022")], {
+		duration: $animation === "on" ? 2000 : 0
+	});
+
 	const updateDomain = () => {
-		if (scrollValue === 4) {
-			$lineDomain = lineData.slice(0, 2).map((d) => d.date);
-		} else {
+		if (scrollValue === 6) {
 			$lineDomain = extent(lineData, (d) => d.date);
+		} else {
+			$lineDomain = [new Date("5-1-2021"), new Date("9-1-2022")];
 		}
 	};
-
-	$: showBar = scrollValue < 4 || scrollValue === undefined;
-	$: showLine = scrollValue >= 4;
-	$: barData = getBarData(scrollValue);
-
-	$: middleLine = scrollValue >= 1;
-	$: colorByMajority = scrollValue >= 3;
 </script>
 
 <div class="toggle">
@@ -53,7 +52,9 @@
 <section id="scrolly">
 	<div class="sticky">
 		{#if showBar}
-			<BarChart data={barData} {middleLine} {colorByMajority} />
+			<BarChart data={barData} {middleLine} />
+		{:else if showTable}
+			<p>table</p>
 		{:else if showLine}
 			<LineChart data={lineData} domain={$lineDomain} />
 		{/if}

@@ -2,25 +2,16 @@
 	import { scaleLinear, scaleBand, max } from "d3";
 	import { animation } from "$stores/misc.js";
 	import _ from "lodash";
-	import { tweened } from "svelte/motion";
-	import { interpolateLab } from "d3-interpolate";
 	import { fade } from "svelte/transition";
 
 	export let data;
 	export let middleLine;
-	export let colorByMajority;
 
 	$: sortedData = _.orderBy(data, xAccessor);
 
 	const width = 800;
 	const height = 600;
 	const margin = { left: 150, top: 40, right: 100, bottom: 0 };
-	const color = "rgb(247, 141, 42)";
-	const highlightColor = "rgb(219, 211, 189)";
-	const colorTween = tweened(color, {
-		interpolate: interpolateLab,
-		duration: 800
-	});
 
 	const xAccessor = (d) => d.female_year_2022;
 	const yAccessor = (d) => d.genre;
@@ -33,12 +24,6 @@
 		.paddingInner(0.03);
 
 	$: t = { duration: $animation === "on" ? 1000 : 0 };
-	$: colorByMajority, updateColor();
-
-	const updateColor = () => {
-		if (colorByMajority) $colorTween = highlightColor;
-		else $colorTween = color;
-	};
 </script>
 
 <figure style:width={`${width}px`} style:height={`${height}px`}>
@@ -49,20 +34,13 @@
 				{@const y = yScale(yAccessor(bar))}
 				{@const h = yScale.bandwidth()}
 				{@const w = xScale(xAccessor(bar))}
-				{@const highlight = colorByMajority && bar.female_listeners_2020 >= 0.5}
-				{@const fill =
-					$animation === "on" && highlight
-						? $colorTween
-						: $animation === "off" && highlight
-						? highlightColor
-						: color}
 				{@const label = yAccessor(bar)}
 				<g
 					id={_.kebabCase(bar.genre)}
 					class:animated={$animation === "on"}
 					transform={`translate(${x}, ${y})`}
 				>
-					<rect height={h} width={w} {fill} />
+					<rect height={h} width={w} />
 					<text x={-10} y={h - 10} class="label">{label}</text>
 				</g>
 			{/each}
@@ -80,6 +58,9 @@
 </figure>
 
 <style>
+	rect {
+		fill: rgb(247, 141, 42);
+	}
 	.animated {
 		transition: all 1500ms;
 	}

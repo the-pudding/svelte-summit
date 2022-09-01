@@ -9,8 +9,6 @@
 	export let data;
 	export let domain;
 
-	$: console.log({ data });
-
 	const xKey = "date";
 	const yKey = "value";
 
@@ -30,7 +28,7 @@
 		<Svg>
 			<AxisX ticks={2} formatTick={(d) => timeFormatter(d)} />
 			<AxisY ticks={4} />
-			<Line />
+			<Line stroke="pink" />
 		</Svg>
 	</LayerCake>
 </div>
@@ -39,5 +37,8 @@
 	.chart-container {
 		width: 800px;
 		height: 600px;
+	}
+	:global(svg.layercake-layout-svg) {
+		overflow: hidden;
 	}
 </style>
