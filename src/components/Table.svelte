@@ -51,6 +51,6 @@
 		font-weight: 800;
 	}
 	.sorted {
-		background: #edbcb4;
+		background: #f2cc96;
 	}
 </style>

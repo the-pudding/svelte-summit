@@ -77,8 +77,8 @@
 <style>
 	.toggle {
 		position: fixed;
-		top: 0;
-		right: 0;
+		top: 1em;
+		right: 1em;
 	}
 
 	.sticky {
@@ -86,7 +86,7 @@
 		flex-direction: column;
 		align-items: center;
 		position: sticky;
-		top: 4em;
+		top: 6em;
 		z-index: -1000;
 	}
 
