@@ -31,7 +31,9 @@
 	<div class="row" animate:flip={t}>
 		{#each columns as { key }}
 			{@const sorted = key === sortedBy}
-			<div class="item" class:sorted>{row[key]}</div>
+			{@const value =
+				key !== "genre" ? `${(row[key] * 100).toFixed(1)}%` : row[key]}
+			<div class="item" class:sorted>{value}</div>
 		{/each}
 	</div>
 {/each}

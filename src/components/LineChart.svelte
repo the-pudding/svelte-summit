@@ -26,8 +26,8 @@
 		{data}
 	>
 		<Svg>
-			<AxisX ticks={2} formatTick={(d) => timeFormatter(d)} />
-			<AxisY ticks={4} />
+			<AxisX ticks={2} formatTick={timeFormatter} />
+			<AxisY ticks={4} formatTick={(d) => `${d * 100}%`} />
 			<Line stroke="orange" />
 		</Svg>
 	</LayerCake>

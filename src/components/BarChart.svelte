@@ -1,5 +1,5 @@
 <script>
-	import { scaleLinear, scaleBand, max } from "d3";
+	import { scaleLinear, scaleBand, max, tickStep } from "d3";
 	import { animation } from "$stores/misc.js";
 	import _ from "lodash";
 	import { fade } from "svelte/transition";
@@ -13,6 +13,7 @@
 
 	const xAccessor = (d) => d.female_year_2022;
 	const yAccessor = (d) => d.genre;
+	const formatTick = (d) => d * 100;
 
 	$: sortedData = _.orderBy(data, xAccessor);
 	$: xScale = scaleLinear()
@@ -29,10 +30,12 @@
 <figure style:width={`${width}px`} style:height={`${height}px`}>
 	<svg {width} {height}>
 		<g class="axis">
-			{#each ticks as tick}
+			{#each ticks as tick, i}
 				<g class="tick" transform={`translate(${xScale(tick)}, 0)`}>
 					<line x1={0} y1={margin.top} x2={0} y2={height - margin.bottom} />
-					<text x={0} y={height - margin.bottom + 20}>{tick}</text>
+					<text x={0} y={height - margin.bottom + 20}
+						>{`${formatTick(tick)}${i === ticks.length - 1 ? "%" : ""}`}</text
+					>
 				</g>
 			{/each}
 		</g>
