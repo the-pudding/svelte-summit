@@ -15,10 +15,10 @@
 		"Here are the top 15 genres and their share of streams by women/mixed gender bands.",
 		"Genres above the line have majority of streams by women/mixed gender bands.",
 		"Let’s sort by the percentage of streams by women/mixed gender bands.",
-		"This is a table sorted by women/mixed gender performers",
-		"Now we can sort it by women/mixed gender listeners",
-		"This is k-pop recently, stationary",
-		"If we zoom out, we can see this is part of a big surge"
+		"This is a table sorted by share women/mixed gender performers.",
+		"Now we can sort it by women/mixed gender listeners.",
+		"This is the share skew of k-pop in the last year. Pretty stationary.",
+		"Zooming out, we can see that this is part of a larger growth since 2018."
 	];
 
 	let barData;
