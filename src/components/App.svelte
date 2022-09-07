@@ -32,19 +32,15 @@
 	$: barData = getBarData(scrollValue);
 	$: tableData = getTableData(scrollValue);
 	$: middleLine = scrollValue >= 1;
-	$: if ($lineDomain) updateDomain(scrollValue);
 
-	$: lineDomain = tweened([new Date("5-1-2021"), new Date("9-1-2022")], {
+	const lineDomain = tweened([new Date("5-1-2021"), new Date("9-1-2022")], {
 		duration: $animation === "on" ? 2000 : 0
 	});
 
-	const updateDomain = () => {
-		if (scrollValue === 6) {
-			$lineDomain = extent(lineData, (d) => d.date);
-		} else {
-			$lineDomain = [new Date("5-1-2021"), new Date("9-1-2022")];
-		}
-	};
+	$: $lineDomain =
+		scrollValue === 6
+			? extent(lineData, (d) => d.date)
+			: [new Date("5-1-2021"), new Date("9-1-2022")];
 </script>
 
 <div class="toggle">
