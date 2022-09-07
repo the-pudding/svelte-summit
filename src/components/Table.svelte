@@ -11,7 +11,6 @@
 		{ key: "female_listeners_2020", label: "Female listeners" }
 	];
 
-	$: t = { duration: $animation === "on" ? 1200 : 0 };
 	$: sortedBy =
 		scrollValue === 3
 			? "female_listeners_2020"
@@ -28,7 +27,12 @@
 		{/each}
 	</tr>
 
-	{#each data as row (row.genre)}
+	{#each data as row, i (row.genre)}
+		{@const t = {
+			duration: $animation === "on" ? 1000 : 0,
+			delay: $animation === "on" ? 100 * i : 0
+		}}
+
 		<tr class="row" animate:flip={t}>
 			{#each columns as { key }}
 				{@const sorted = key === sortedBy}
