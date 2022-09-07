@@ -20,27 +20,29 @@
 			: undefined;
 </script>
 
-<div class="row">
-	{#each columns as { key, label }}
-		{@const sorted = key === sortedBy}
-		<div class="item title" class:sorted>{label}</div>
-	{/each}
-</div>
-
-{#each data as row (row.genre)}
-	<div class="row" animate:flip={t}>
-		{#each columns as { key }}
+<table>
+	<tr class="row">
+		{#each columns as { key, label }}
 			{@const sorted = key === sortedBy}
-			{@const value =
-				key !== "genre" ? `${(row[key] * 100).toFixed(1)}%` : row[key]}
-			<div class="item" class:sorted>{value}</div>
+			<th class="item title" class:sorted>{label}</th>
 		{/each}
-	</div>
-{/each}
+	</tr>
+
+	{#each data as row (row.genre)}
+		<tr class="row" animate:flip={t}>
+			{#each columns as { key }}
+				{@const sorted = key === sortedBy}
+				{@const value =
+					key !== "genre" ? `${(row[key] * 100).toFixed(1)}%` : row[key]}
+				<td class="item" class:sorted>{value}</td>
+			{/each}
+		</tr>
+	{/each}
+</table>
 
 <style>
-	.row {
-		display: flex;
+	table {
+		width: 70%;
 	}
 	.item {
 		background: var(--color-gray-100);
