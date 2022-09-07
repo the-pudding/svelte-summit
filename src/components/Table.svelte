@@ -42,7 +42,7 @@
 
 <style>
 	table {
-		width: 70%;
+		width: 600px;
 	}
 	.item {
 		background: var(--color-gray-100);
