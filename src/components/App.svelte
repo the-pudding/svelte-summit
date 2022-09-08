@@ -37,6 +37,9 @@
 		duration: $animation === "on" ? 2000 : 0
 	});
 
+	$: if (scrollValue > 6) scrollValue = 6;
+	$: console.log({ scrollValue });
+
 	$: $lineDomain =
 		scrollValue === 6
 			? extent(lineData, (d) => d.date)
